@@ -6,13 +6,11 @@ echo ""
 indexTemplate="/home/xpand/indexTemplate.php"
 readmeTemplate="/home/xpand/readmeTemplate.md"
 apacheConfTemplate='/var/www/vhosts/vhost.conf.txt'
-newApacheConf="/etc/apache2/sites-available/${input}.conf"
+newApacheConf="/etc/apache2/sites-available/vhost-${input}.conf"
 vHostDirectory="/var/www/vhosts"
 
 # Create vHost directory
 sudo mkdir "${vHostDirectory}/${input}"
-sudo chown www-data:www-data "${vHostDirectory}/${input}"
-echo "vHost Directory: ${vHostDirectory}/${input}"
 
 # Create apache virtual host
 sudo cp "${apacheConfTemplate}" "${newApacheConf}"
@@ -29,12 +27,11 @@ while read line; do
 
 done < $newApacheConf
 
-sudo a2ensite "${input}.conf"
+sudo a2ensite "vhost-${input}.conf"
 sudo systemctl reload apache2
 
 # Create default index.php file
 sudo cp "${indexTemplate}" "${vHostDirectory}/${input}/index.php"
-sudo chown www-data:www-data "${vHostDirectory}/${input}/index.php"
 
 # Create default README.md file
 sudo cp "${readmeTemplate}" "${vHostDirectory}/${input}/README.md"
@@ -49,7 +46,10 @@ while read line; do
         n=$((n+1))
 
 done < "${vHostDirectory}/${input}/README.md"
-sudo chown www-data:www-data "${vHostDirectory}/${input}/README.md"
+
+sudo chown www-data:www-data -R "${vHostDirectory}/${input}"
 
 echo ""
 echo "Your vHost has been created successfully."
+echo ""
+echo "vHost Directory: ${vHostDirectory}/${input}"
