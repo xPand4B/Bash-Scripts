@@ -1,0 +1,22 @@
+[Unit]
+Description=Minecraft Server: %i
+After=network.target
+
+[Service]
+WorkingDirectory=/opt/minecraft/%i
+
+User=minecraft
+Group=minecraft
+
+Restart=always
+
+ExecStart=/usr/bin/screen -DmS mc-%i /usr/bin/java -Xms512M -Xmx5G -jar server.jar nogui
+
+ExecStop=/usr/bin/screen -p 0 -S mc-%i -X eval 'stuff "say SERVER SHUTTING DOWN IN 20 SECONDS. SAVING ALL MAPS..."\015'
+ExecStop=/bin/sleep 20
+ExecStop=/usr/bin/screen -p 0 -S mc-%i -X eval 'stuff "save-all"\015'
+ExecStop=/usr/bin/screen -p 0 -S mc-%i -X eval 'stuff "stop"\015'
+
+
+[Install]
+WantedBy=multi-user.target
