@@ -60,9 +60,15 @@ if [ $input -eq 1 ]; then
 
 	# GNOME Tweaks
 	echo ""
-	echo "${green}Installing gnomw-Tweaks...${reset}"
+	echo "${green}Installing gnome-Tweaks...${reset}"
 	echo ""
 	sudo apt install gnome-tweaks -y
+
+	# Menulibre
+	echo ""
+	echo "${green}Installing Menulibre...${reset}"
+	echo ""
+	sudo apt install menulibre -y
 
 	# Set default audio input/output
 
