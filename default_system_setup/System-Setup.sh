@@ -69,6 +69,12 @@ if [ $input -eq 1 ]; then
 	echo "${green}Installing Menulibre...${reset}"
 	echo ""
 	sudo apt install menulibre -y
+	
+	# YouTube dl
+	echo ""
+	sudo add-apt-repository ppa:flexiondotorg/youtube-dl-gui
+	sudo apt update -y
+	sudo apt install youtube-dlg
 
 	# Set default audio input/output
 
