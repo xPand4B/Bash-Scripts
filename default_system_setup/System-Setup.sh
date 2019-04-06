@@ -189,7 +189,7 @@ EOF
 	echo ""
 	echo -e "\t$ sudo mysql -u root"
 	echo -e "\tmysql> CREATE USER '${red}USERNAME${reset}'@'localhost' IDENTIFIED BY '${red}PASSWORD${reset}';"
-	echo -e "\tmysql> GRANT ALL PRIVILEGES ON *.* '${red}USERNAME${reset}'@'localhost' WITH GRANT OPTION;"
+	echo -e "\tmysql> GRANT ALL PRIVILEGES ON *.* TO '${red}USERNAME${reset}'@'localhost' WITH GRANT OPTION;"
 
 	echo ""
 	echo "${green}If you want a user without a password you need to uncomment the following text.${reset}"
