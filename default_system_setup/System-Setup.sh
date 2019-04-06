@@ -188,7 +188,7 @@ EOF
 	echo "${green}Type following text to create a new mysql user.${reset}"
 	echo ""
 	echo -e "\t$ sudo mysql -u root"
-	echo -e "\tmysql> CREATE NEW USER '${red}USERNAME${reset}'@'localhost' IDENTIFIED BY '${red}PASSWORD${reset}';"
+	echo -e "\tmysql> CREATE USER '${red}USERNAME${reset}'@'localhost' IDENTIFIED BY '${red}PASSWORD${reset}';"
 	echo -e "\tmysql> GRANT ALL PRIVILEGES ON *.* '${red}USERNAME${reset}'@'localhost' WITH GRANT OPTION;"
 
 	echo ""
