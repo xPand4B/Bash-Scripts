@@ -72,9 +72,8 @@ if [ $input -eq 1 ]; then
 	
 	# YouTube dl
 	echo ""
-	sudo add-apt-repository ppa:flexiondotorg/youtube-dl-gui
 	sudo apt update -y
-	sudo apt install youtube-dlg
+	sudo apt install youtube-dl-gui
 
 	# Set default audio input/output
 
