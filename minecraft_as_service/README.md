@@ -1,4 +1,4 @@
-# Bash-Scripts/minecraft_as_service
+# Bash-Scripts / Mincraft as a Service
 
 A small bash script to run a minecraft server as a linux service.
 
