@@ -60,7 +60,7 @@ echo ""
 # Generate new SSH key file
 cd ~/.ssh
 ssh-keygen -t rsa -C $gitEmail -f $gitName
-# ssh-add $gitName
+ssh-add $gitName
 
 # Copy to config
 echo >> ~/.ssh/config
