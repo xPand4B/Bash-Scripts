@@ -119,7 +119,7 @@ echo -e "${green}Directories successfully created!${reset}"
 #=================================
 echo ""
 echo -e "${green}Cloning xPand4B/ValetDashboard...${reset}"
-cd 00-Projects
+cd $developmentDir/00-Projects
 git clone git@github.com:xPand4B/ValetDashboard.git
 cd ..
 echo -e "${green}xPand4B/ValetDashboard successfully cloned...${reset}"
@@ -128,9 +128,9 @@ echo -e "${green}xPand4B/ValetDashboard successfully cloned...${reset}"
 #=================================
 echo ""
 echo -e "${green}Linking directories to Valet...${reset}"
-cd 00-Projects && valet park && cd ..
-cd sw6_testing && valet park && cd ..
-cd Symfony && valet park && cd ..
+cd $developmentDir/00-Projects && valet park && cd ..
+cd $developmentDir/sw6_testing && valet park && cd ..
+cd $developmentDir/Symfony && valet park && cd ..
 echo -e "${green}Directories successfully linked!${reset}"
 
 
