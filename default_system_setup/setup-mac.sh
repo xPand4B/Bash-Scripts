@@ -1,146 +1,139 @@
 #!/bin/bash
+
+# Styles
+#=================================
 red=`tput setaf 1`
 green=`tput setaf 2`
 reset=`tput sgr0`
 
-while :
-do
-
+# Initial setup
+#=================================
+read -p "Enter your preferred dev directory ${green}[~/Development]${reset}: " developmentDir
+developmentDir=${developmentDir:-"~/Development"}
 echo ""
-echo "[1] Install Standard Packages"
-echo -e "\tHomebrew, PHP, Apache, MySQL"
+
+# Install Brew
+#=================================
 echo ""
-echo "[2] Install WebDev Dependencies"
-echo -e "\tGit, Composer, nodejs, Laravel, ..."
+echo -e "${green}Installing Homebrew...${reset}"
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+echo -e "${green}Homebrew sucessfully installed!${reset}"
+
+# Installing git
+#=================================
 echo ""
-echo "[3] Change Apache config"
-echo -e "\thttp://localhost = /Users/{user}/Development"
+echo -e "${green}Installing Git...${reset}"
+brew update
+brew install git
+echo -e "${green}Git successfully installed!${reset}"
+
+# Install ZSH
+#=================================
 echo ""
-echo "[4] Add mysql user 'app'@'localhost'"
+echo -e "${green}Installing ZSH...${reset}"
+brew update
+
+# https://sourabhbajaj.com/mac-setup/iTerm/zsh.html
+brew install zsh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+# chsh -s $(which zsh)
+
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+git clone https://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions
+source ~/.zshrc
+
+echo -e "${green}ZSH sucessfully installed!${reset}"
 echo ""
-echo "[5] Re-write '.bash_profile'"
-echo -e "\tAdd aliases and exports"
-
+echo -e "${green}Read more about ZSH here: https://sourabhbajaj.com/mac-setup/iTerm/zsh.html${reset}"
 echo ""
-read -p "Select your option [ ${green}0(all)${reset} / ${green}1${reset} / ${green}2${reset} / ${green}3${reset} / ${green}4${reset} ]: " input
 
-# if mysql: add user -u app -p app
+# Install PHP
+#=================================
+echo ""
+echo -e "${green}Installing PHP...${reset}"
+brew update
 
-# Install homebrew
-if [ $input -eq 0 ] || [ $input -eq 1 ]|| [ $input -eq 2 ]; then
-    /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-fi
+brew install php@7.4
+brew install php@8.0
 
-# Install Standard Packages
-if [ $input -eq 1 ] || [ $input -eq 0 ]; then
-    # PHP
-    brew install php@7.2
-    brew unlink php && brew link php@7.2 --force
-    ​
-    # Apache
-    brew install httpd
+brew unlink php
+brew unlink php@7.4
+brew unlink php@8.0
+brew link php@8.0 --force --overwrite
+echo -e "${green}PHP sucessfully installed!${reset}"
 
-    # PSH dependencies
-    brew install ant
+# Install Node
+#=================================
+echo ""
+echo -e "${green}Installing Node...${reset}"
+brew update
 
-    # MySQL
-    brew install mysql@5.7
+brew install node
 
-    echo ""
-    echo "PHP:"
-    php -v
+echo -e "${green}Node sucessfully installed!${reset}"
 
-    echo ""
-    echo "Apache:"
-    httpd -v
-fi
+# Install Composer
+#=================================
+echo ""
+echo -e "${green}Installing Composer...${reset}"
+brew update
+brew install composer
 
-# Install WebDev Dependencies
-if [ $input -eq 2 ] || [ $input -eq 0 ]; then
-    # Composer
-    brew install composer
+echo -e "${green}Composer successfully installed${reset}"
 
-    # node.js
-    brew install node
+# Install CLI Helper
+#=================================
+echo ""
+echo -e "${green}Installing CLI Helper...${reset}"
+brew update
 
-    # git
-    brew install git
+brew install symfony-cli/tap/symfony-cli
+composer global require laravel/installer
 
-    # Laravel
-    composer global require laravel/installer
+echo -e "${green}CLI Helper successfully installed${reset}"
 
-    echo ""
-	echo "${green}Everything has successfully been installed.${reset}"
-	echo ""
+# Install Valet
+#=================================
+echo ""
+echo -e "${green}Installing Laravel Valet...${reset}"
+brew update
+composer global require laravel/valet
+valet install
+valet use php@8.0 --force
+echo -e "${green}Laravel Valet successfully installed!${reset}"
 
-    echo ""
-    echo "composer:"
-    composer -v
+# Creating directories
+#=================================
+echo ""
+echo -e "${green}Creating directories...${reset}"
+mkdir $developmentDir
+mkdir $developmentDir/00-Projects
+mkdir $developmentDir/Symfony
+mkdir $developmentDir/sw5
+mkdir $developmentDir/sw6
+mkdir $developmentDir/sw6_testing
+ls -la $developmentDir
+echo -e "${green}Directories successfully created!${reset}"
 
-    echo ""
-    echo "node.js"
-    node -v
+# Cloning Valet Dashboard
+#=================================
+echo ""
+echo -e "${green}Cloning xPand4B/ValetDashboard...${reset}"
+cd 00-Projects
+git clone git@github.com:xPand4B/ValetDashboard.git
+cd ..
+echo -e "${green}xPand4B/ValetDashboard successfully cloned...${reset}"
 
-    echo ""
-    echo "npm:"
-    npm -v
+# Parking Directories to Valet
+#=================================
+echo ""
+echo -e "${green}Linking directories to Valet...${reset}"
+cd 00-Projects && valet park && cd ..
+cd sw6_testing && valet park && cd ..
+cd Symfony && valet park && cd ..
+echo -e "${green}Directories successfully linked!${reset}"
 
-    echo ""
-    echo "Laravel:"
-    laravel -V
-fi
 
-# Change Apache config
-if [ $input -eq 3 ] || [ $input -eq 0 ]; then
-    user=$USER
-    
-    apacheConfig='/etc/apache2/httpd.conf'
-    apacheVhostConfig='/etc/apache2/extra/httpd-vhost.conf'
-
-    httpdConfig='/usr/local/etc/httpd/httpd.conf'
-    httpdVhostCOnfig='/usr/local/etc/httpd/extra/httpd-vhost.conf'
-
-    userConfig='/usr/local/etc/httpd/extra/httpd-userdir.conf'
-fi
-
-# Re-write .bash_profile
-if [ $input -eq 4 ] || [ $input -eq 0 ]; then
-    touch ~/.bash_profile
-
-    echo '#***************************' >> ~/.bash_profile
-    echo '#***** Exports *************' >> ~/.bash_profile
-    echo '#***************************' >> ~/.bash_profile
-    echo 'export PATH="/usr/local/sbin:$PATH"' >> ~/.bash_profile
-    echo '---' >> ~/.bash_profile
-    echo 'export PATH="/usr/local/mysql/bin:$PATH"' >> ~/.bash_profile
-    echo 'export PATH="~/.composer/vendor/bin:$PATH"' >> ~/.bash_profile
-    echo 'export PATH="/usr/local/opt/php@7.2/bin:$PATH"' >> ~/.bash_profile
-    echo 'export PATH="/usr/local/opt/php@7.2/sbin:$PATH"' >> ~/.bash_profile
-    echo '---' >> ~/.bash_profile
-    echo 'export LDFLAGS="-L/usr/local/opt/php@7.2/lib"' >> ~/.bash_profile
-    echo '---' >> ~/.bash_profile
-    echo 'export CPPFLAGS="-I/usr/local/opt/php@7.2/include"' >> ~/.bash_profile
-    echo '---' >> ~/.bash_profile
-    echo '' >> ~/.bash_profile
-
-    echo '#***************************' >> ~/.bash_profile
-    echo '#***** Alias ***************' >> ~/.bash_profile
-    echo '#***************************' >> ~/.bash_profile
-    echo 'alias dev="cd ~/Development"' >> ~/.bash_profile
-    echo 'alias udemy="cd ~/Nextcloud/Private/Webdev/Udemy"' >> ~/.bash_profile
-    echo 'alias github="cd ~/Nextcloud/Private/Webdev/Github"' >> ~/.bash_profile
-    echo '---' >> ~/.bash_profile
-    echo 'alias ll="ls -la"' >> ~/.bash_profile
-    echo '---' >> ~/.bash_profile
-    echo 'alias psh="./psh.phar"' >> ~/.bash_profile
-    echo '---' >> ~/.bash_profile
-    echo 'alias pu="clear && vendor/bin/phpunit"' >> ~/.bash_profile
-    echo 'alias pf="clear && vendor/bin/phpunit --filter"' >> ~/.bash_profile
-    echo '---' >> ~/.bash_profile
-    echo 'alias pa="clear && php artisan"' >> ~/.bash_profile
-    echo '' >> ~/.bash_profile
-
-    source ~/.bash_profile
-fi
-
-done
+# Open Valet Dashboard
+#=================================
+open http://valetdashboard.test
