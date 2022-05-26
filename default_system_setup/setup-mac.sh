@@ -61,7 +61,7 @@ brew unlink php@7.4
 brew unlink php@8.0
 brew unlink php@8.1
 
-brew link php@8.0 --force --overwrite
+brew link php@8.1 --force --overwrite
 echo -e "${green}PHP sucessfully installed!${reset}"
 
 # Install Composer
@@ -80,7 +80,7 @@ echo -e "${green}Installing Laravel Valet...${reset}"
 brew update
 composer global require laravel/valet
 valet install
-valet use php@8.0 --force
+valet use php@8.1 --force
 echo -e "${green}Laravel Valet successfully installed!${reset}"
 
 # Install PHP Monitor
@@ -97,8 +97,6 @@ echo -e "${green}PHP Monitor successfully installed!${reset}"
 #=================================
 echo ""
 echo -e "${green}Installing CLI Helper...${reset}"
-brew update
-brew install symfony-cli/tap/symfony-cli
 composer global require laravel/installer
 echo -e "${green}CLI Helper successfully installed${reset}"
 
@@ -114,12 +112,9 @@ echo -e "${green}Node sucessfully installed!${reset}"
 #=================================
 echo ""
 echo -e "${green}Creating directories...${reset}"
-mkdir $developmentDir
-mkdir $developmentDir/00-Projects
-mkdir $developmentDir/Symfony
-mkdir $developmentDir/sw6
-mkdir $developmentDir/sw6_testing
-ls -la $developmentDir
+mkdir -p $developmentDir/00-Projects
+mkdir -p $developmentDir/Laravel
+mkdir -p $developmentDir/byte5
 echo -e "${green}Directories successfully created!${reset}"
 
 # Cloning Valet Dashboard
@@ -134,8 +129,8 @@ echo -e "${green}xPand4B/ValetDashboard successfully cloned...${reset}"
 echo ""
 echo -e "${green}Linking directories to Valet...${reset}"
 cd $developmentDir/00-Projects && valet park
-cd $developmentDir/sw6_testing && valet park
-cd $developmentDir/Symfony && valet park
+cd $developmentDir/Laravel && valet park
+cd $developmentDir/byte5 && valet park
 echo -e "${green}Directories successfully linked!${reset}"
 
 
